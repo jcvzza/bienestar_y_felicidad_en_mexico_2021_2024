@@ -380,15 +380,15 @@ df_biare['cs_POS'].unique()
 #verificamos los datos de la columna cs_ING, ya que aparece como object
 df_biare['cs_ING'].unique()
 
-#como vemos que hay nulos en distintos formatos, primero los estandarizamos
-df_biare['cs_ING'] = df_biare['cs_ING'].replace(999999, np.nan)
-df_biare['cs_ING'] = df_biare['cs_ING'].replace(' ', np.nan)
-
-#como vemos que algunos valores aparecen como str y otros como int, los corvertimos a numerico
+#PRIMERO convertimos a numérico (esto ya arregla los '006000' y el ' ' -> NaN)
 df_biare['cs_ING'] = pd.to_numeric(df_biare['cs_ING'], errors='coerce')
 
-#convertimos el conjunto a un tipo de dato float
-df_biare['cs_ING'] = df_biare['cs_ING'].astype('float64')
+#YA CONVERTIDO a número, ahora sí el 999999 (no sabe/no responde) se reemplaza correctamente
+df_biare['cs_ING'] = df_biare['cs_ING'].replace(999999, np.nan)
+
+#confirmamos que ya no quede ningún 999999
+print('Casos con 999999 restantes:', (df_biare['cs_ING'] == 999999).sum())
+
 #verificamos que se hayan realizado los cambios
 df_biare['cs_ING'].unique()
 
@@ -489,6 +489,6 @@ df_biare[['viv_FCH_PRE', 'viv_FCH_DEF']].info()
 
 # %%
 #guardamos en csv nuestro dataset limpio
-df_biare.to_csv('../Limpieza de datos/biare_limpio_2021_2024.csv', index=False, encoding='utf-8-sig')
+df_biare.to_csv('../Limpieza de datos (Practica 1)/biare_limpio_2021_2024.csv', index=False, encoding='utf-8-sig')
 
 
