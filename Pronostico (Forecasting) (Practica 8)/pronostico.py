@@ -203,4 +203,30 @@ print(comparacion.round(3))
 # %% [markdown]
 # La regresión lineal salio un poco mejor, aunque la diferencia es muy pequeña, así que el modelo más complejo no aportó nada extra. Los dos se quedaron como 0.3 puntos abajo del promedio real de 2024, lo cual indica que ese aumento no se explica con las preguntas del modelo, y puede ser un cambio real o algo externo que no quedo registrado en las preguntas
 
+# %% [markdown]
+# ### proyección a futuro comparado con los datos que tenemos
+
+# %%
+anios_futuros = np.array([[2025], [2026]])
+proyeccion = modelo.predict(anios_futuros)
+
+todos_anios = np.array([[2021], [2022], [2023], [2024], [2025], [2026]])
+
+plt.figure(figsize=(8, 4.5))
+plt.errorbar(anios, medias, yerr=[error_inf, error_sup], marker='o', capsize=5,
+             label='Promedio observado (IC 95%)')
+plt.plot(todos_anios, modelo.predict(todos_anios), linestyle='--', color='gray',
+         label='Recta de tendencia')
+plt.scatter([2025, 2026], proyeccion, color='red', zorder=3, label='Proyección')
+plt.xticks([2021, 2022, 2023, 2024, 2025, 2026])
+plt.xlabel('Año')
+plt.ylabel('Satisfacción con la vida (promedio, 0 a 10)')
+plt.title('Satisfacción con la vida: observado y proyección')
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+for anio, valor in zip([2025, 2026], proyeccion):
+    print(f"{anio}: {valor:.3f}")
+
 
